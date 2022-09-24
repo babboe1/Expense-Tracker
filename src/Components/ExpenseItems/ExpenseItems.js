@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import Context from '../Context/Context';
 import ExpenseItem from '../ExpenseItem/ExpenseItem';
 
 const ExpenseItems = () => {
+   const contextData = useContext(Context);
+   let dataTest = [...contextData.newExpenseData];
+   const data = dataTest.map((data) => {
+      for (const key in data) {
+         if (Object.hasOwnProperty.call(data, key)) {
+            return data[key];
+         }
+      }
+   });
+   console.log(data);
+   console.log(dataTest);
+
    const expenses = [
       {
          id: 'e1',
@@ -28,9 +41,21 @@ const ExpenseItems = () => {
          date: new Date(2021, 5, 12),
       },
    ];
-   return expenses.map((item) => (
+
+   const [expenseState, setExpenseState] = useState(expenses);
+   // console.log(expenseState);
+
+   useEffect(() => {
+      setExpenseState((prevState) => {
+         // console.log(prevState);
+         console.log(false, prevState, data);
+         return [...prevState, ...data];
+      });
+   }, [contextData]);
+
+   return expenseState.map((item, idx) => (
       <ExpenseItem
-         key={item.id}
+         key={idx}
          title={item.title}
          amount={item.amount}
          date={item.date}
