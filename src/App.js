@@ -1,11 +1,13 @@
 import React from 'react';
-import ExpenseItem from './Components/ExpenseItem/ExpenseItem';
+import ExpenseItems from './Components/ExpenseItems/ExpenseItems';
+import ExpenseForm from './Components/NewExpense/ExpenseForm/ExpenseForm';
 
 const App = () => {
    return (
       <div>
          <h1>Function React</h1>
-         <ExpenseItem />
+         <ExpenseForm />
+         <ExpenseItems />
       </div>
    );
 };

@@ -28,6 +28,8 @@ const ExpenseItems = () => {
          date: new Date(2021, 5, 12),
       },
    ];
+   console.log(expenses)
+   
    return expenses.map((item) => (
       <ExpenseItem
          key={item.id}
