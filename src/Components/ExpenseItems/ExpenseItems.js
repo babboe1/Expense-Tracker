@@ -4,16 +4,15 @@ import ExpenseItem from '../ExpenseItem/ExpenseItem';
 
 const ExpenseItems = () => {
    const contextData = useContext(Context);
-   let dataTest = [...contextData.newExpenseData];
-   const data = dataTest.map((data) => {
-      for (const key in data) {
-         if (Object.hasOwnProperty.call(data, key)) {
-            return data[key];
-         }
-      }
-   });
-   console.log(data);
-   console.log(dataTest);
+   const data = contextData.newExpenseData;
+   // console.log(data);
+   // console.log(dataTest);
+   let test = 1
+   setInterval(() => {
+      test = test + 1;
+      // console.log(test);
+      
+   }, 5000);
 
    const expenses = [
       {
@@ -45,13 +44,26 @@ const ExpenseItems = () => {
    const [expenseState, setExpenseState] = useState(expenses);
    // console.log(expenseState);
 
-   useEffect(() => {
-      setExpenseState((prevState) => {
-         // console.log(prevState);
-         console.log(false, prevState, data);
-         return [...prevState, ...data];
-      });
-   }, [contextData]);
+   // useEffect(() => {
+   //    setInterval(() => {
+   //       // console.log(data, data.length);
+   //    }, 5000);
+   //    setExpenseState((prevState) => {
+   //       // console.log(data);
+   //       return [...prevState, ...data];
+   //    });
+   // }, [data]);
+
+   // contextData.update = () => {
+   //    setExpenseState((prevState) => {
+   //       console.log([...prevState, ...data]);
+   //       return [...prevState, ...data];
+   //    });
+   // }
+   
+   useEffect(() => { 
+      console.log(test);
+   }, [test]);
 
    return expenseState.map((item, idx) => (
       <ExpenseItem
