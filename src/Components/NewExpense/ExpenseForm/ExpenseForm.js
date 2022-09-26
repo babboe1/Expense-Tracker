@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import Context from '../../Context/Context';
 import './ExpenseForm.css';
 
 const ExpenseForm = (props) => {
@@ -6,6 +7,7 @@ const ExpenseForm = (props) => {
 
    const changeHandler = (e, type) => {
       setInitial((prevState) => {
+
          if (type === 'date') {
             return {
                ...prevState,
@@ -18,12 +20,11 @@ const ExpenseForm = (props) => {
          }
       })
    };
-
+   const expenseContext = useContext(Context);
+   
    const submitHandler = (e) => {
+      expenseContext.getDataHandler(initial);
       e.preventDefault();
-      const expenseData = { ...initial }
-      // console.log(expenseData);
-      props.newData({expenseData})
       e.target.reset();
    }
 
@@ -32,11 +33,16 @@ const ExpenseForm = (props) => {
          <div className="new-expense__controls">
             <div className="new-expense__control">
                <label htmlFor="">Title</label>
-               <input type="text" onChange={(e) => changeHandler(e, 'title')} />
+               <input
+                  required
+                  type="text"
+                  onChange={(e) => changeHandler(e, 'title')}
+               />
             </div>
             <div className="new-expense__control">
                <label htmlFor="">Amount</label>
                <input
+                  required
                   type="number"
                   min="0.01"
                   step="0.01"
@@ -46,6 +52,7 @@ const ExpenseForm = (props) => {
             <div className="new-expense__control">
                <label htmlFor="">Date</label>
                <input
+                  required
                   type="date"
                   min="2019-01-01"
                   max="2022-12-12"

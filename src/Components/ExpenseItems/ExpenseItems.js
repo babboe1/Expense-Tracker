@@ -4,16 +4,7 @@ import ExpenseItem from '../ExpenseItem/ExpenseItem';
 
 const ExpenseItems = () => {
    const contextData = useContext(Context);
-   let dataTest = [...contextData.newExpenseData];
-   const data = dataTest.map((data) => {
-      for (const key in data) {
-         if (Object.hasOwnProperty.call(data, key)) {
-            return data[key];
-         }
-      }
-   });
-   console.log(data);
-   console.log(dataTest);
+   const data = contextData.expense;
 
    const expenses = [
       {
@@ -43,15 +34,12 @@ const ExpenseItems = () => {
    ];
 
    const [expenseState, setExpenseState] = useState(expenses);
-   // console.log(expenseState);
 
    useEffect(() => {
       setExpenseState((prevState) => {
-         // console.log(prevState);
-         console.log(false, prevState, data);
          return [...prevState, ...data];
       });
-   }, [contextData]);
+   }, [data]);
 
    return expenseState.map((item, idx) => (
       <ExpenseItem
