@@ -4,15 +4,7 @@ import ExpenseItem from '../ExpenseItem/ExpenseItem';
 
 const ExpenseItems = () => {
    const contextData = useContext(Context);
-   const data = contextData.newExpenseData;
-   // console.log(data);
-   // console.log(dataTest);
-   let test = 1
-   setInterval(() => {
-      test = test + 1;
-      // console.log(test);
-      
-   }, 5000);
+   const data = contextData.expense;
 
    const expenses = [
       {
@@ -42,28 +34,12 @@ const ExpenseItems = () => {
    ];
 
    const [expenseState, setExpenseState] = useState(expenses);
-   // console.log(expenseState);
 
-   // useEffect(() => {
-   //    setInterval(() => {
-   //       // console.log(data, data.length);
-   //    }, 5000);
-   //    setExpenseState((prevState) => {
-   //       // console.log(data);
-   //       return [...prevState, ...data];
-   //    });
-   // }, [data]);
-
-   // contextData.update = () => {
-   //    setExpenseState((prevState) => {
-   //       console.log([...prevState, ...data]);
-   //       return [...prevState, ...data];
-   //    });
-   // }
-   
-   useEffect(() => { 
-      console.log(test);
-   }, [test]);
+   useEffect(() => {
+      setExpenseState((prevState) => {
+         return [...prevState, ...data];
+      });
+   }, [data]);
 
    return expenseState.map((item, idx) => (
       <ExpenseItem
