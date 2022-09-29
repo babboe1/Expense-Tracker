@@ -3,32 +3,33 @@ import Context from '../../Context/Context';
 import './ExpenseForm.css';
 
 const ExpenseForm = (props) => {
-   const [initial, setInitial] = useState("");
+   const [initial, setInitial] = useState('');
+   const [showExpense, setShowExpense] = useState(true);
 
    const changeHandler = (e, type) => {
       setInitial((prevState) => {
-
          if (type === 'date') {
             return {
                ...prevState,
-               date: new Date(e.target.value)
-            }
+               date: new Date(e.target.value),
+            };
          }
          return {
             ...prevState,
-            [type]: e.target.value
-         }
-      })
+            id: prevState.id ? +prevState.id + 1 : 1,
+            [type]: e.target.value,
+         };
+      });
    };
    const expenseContext = useContext(Context);
-   
+
    const submitHandler = (e) => {
       expenseContext.getDataHandler(initial);
       e.preventDefault();
-      e.target.reset();
-   }
+      // e.target.reset();
+   };
 
-   return (
+   return !showExpense ? (
       <form onSubmit={submitHandler} className="" action="">
          <div className="new-expense__controls">
             <div className="new-expense__control">
@@ -61,10 +62,28 @@ const ExpenseForm = (props) => {
             </div>
          </div>
          <div className="new-expense__actions">
-            <button type="button">Cancel</button>
+            <button
+               onClick={() => {
+                  setShowExpense(!showExpense);
+               }}
+               type="button"
+            >
+               Cancel
+            </button>
             <button type="submit">Add Expense</button>
          </div>
       </form>
+   ) : (
+      <div className="new-expense__actions" style={{ textAlign: 'center' }}>
+         <button
+            onClick={() => {
+               setShowExpense(!showExpense);
+            }}
+            type="submit"
+         >
+            Add Expense
+         </button>
+      </div>
    );
 };
 
