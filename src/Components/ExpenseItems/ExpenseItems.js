@@ -1,30 +1,22 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import Context from '../Context/Context';
 import ExpenseItem from '../ExpenseItem/ExpenseItem';
 
 const ExpenseItems = () => {
-   const contextData = useContext(Context);
-   const data = contextData.expense;
-   const filter = contextData.filteredYear;
+   const expenseData = useContext(Context).expenseData;
 
-   const [expenseState, setExpenseState] = useState([]);
-
-   useEffect(() => {
-      setExpenseState(data);
-   }, [data]);
-
-   useEffect(() => {
-      setExpenseState(filter);
-   }, [filter]);
-
-   return expenseState.map((item, idx) => (
-      <ExpenseItem
-         key={idx}
-         title={item.title}
-         amount={item.amount}
-         date={item.date}
-      />
-   ));
+   return expenseData.length > 0 ? (
+      expenseData.map((item, idx) => (
+         <ExpenseItem
+            key={idx}
+            title={item.title}
+            amount={item.amount}
+            date={item.date}
+         />
+      ))
+   ) : (
+      <h2 style={{ textAlign: 'center', color: 'white' }}>No Expense Found</h2>
+   );
 };
 
 export default ExpenseItems;
