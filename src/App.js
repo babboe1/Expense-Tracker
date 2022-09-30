@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from './Components/Card/Card';
 import Context from './Components/Context/Context';
 import ExpensesFilter from './Components/ExpenseFilter/ExpenseFilter';
 import ExpenseChart from './Components/ExpenseItem/ExpenseChart/ExpenseChart';
 import ExpenseItems from './Components/ExpenseItems/ExpenseItems';
 import NewExpense from './Components/NewExpense/NewExpense';
-
 
 const App = () => {
    const expenses = [
@@ -49,24 +48,25 @@ const App = () => {
       { label: 'Nov', value: 0 },
       { label: 'Dec', value: 0 },
    ];
-   const test = [...chartDataPoints];
+   // const test = [...chartDataPoints];
 
    const [expense, setExpenseData] = useState(expenses);
-   test.forEach((item, idx) => {
-      for (const el of expense) {
+   const [flag, setFlag] = useState(false);
+   const [filteredYear, setFilteredYear] = useState(expense);
+   const expenseFlag = flag ? filteredYear : expense;
+
+   chartDataPoints.forEach((item, idx) => {
+      for (const el of expenseFlag) {
          if (idx === el.date.getMonth()) {
             item.value += +el.amount;
-            // console.log(item.value);
          }
       }
    });
-   // eslint-disable-next-line no-unused-vars
-   const [data, setData] = useState(chartDataPoints);
-   const [chart, setChart] = useState(test);
-   const [flag, setFlag] = useState(false);
-   const [filteredYear, setFilteredYear] = useState(expense);
-   let initialValue = data.map((item) => item.value);
+
+   const [chart, setChart] = useState(chartDataPoints);
+   let initialValue = chart.map((item) => item.value);
    const [maxValue, setMaxValue] = useState(Math.max(...initialValue));
+
 
    // Handler functions starts here
    const getDataHandler = (newData) => {
@@ -74,14 +74,11 @@ const App = () => {
          return [...prevState, newData];
       });
       setChart((prev) => {
-         console.log([newData]);
          prev.forEach((item, idx) => {
             if (idx === newData.date.getMonth()) {
                item.value += +newData.amount;
             }
          });
-         let value = prev.map((item) => item.value);
-         setMaxValue(Math.max(...value));
          return [...prev];
       });
    };
@@ -89,27 +86,43 @@ const App = () => {
    const filterYearHandler = (year) => {
       if (year === 'All year') {
          setFilteredYear(expense);
-         let value = chart.map((item) => item.value);
-         setMaxValue(Math.max(...value));
          setFlag(false);
-         return;
+      } else {
+         setFilteredYear(() => {
+            setFlag(true);
+            let filtered = expense.filter(
+               (item) => item.date.getFullYear() === +year,
+            );
+            return filtered;
+         });
       }
-
-      setFilteredYear(() => {
-         setFlag(true);
-         let filtered = expense.filter(
-            (item) => item.date.getFullYear() === +year,
-         );
-         return filtered;
-      });
    };
 
+   useEffect(() => {
+      setChart(() => {
+         return chartDataPoints.map((item, idx) => {
+            for (const el of expenseFlag) {
+               if (idx === el.date.getMonth()) {
+                  item.value += +el.amount;
+               }
+            }
+            return item;
+         });
+      });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [expense, filteredYear]);
+
+   useEffect(() => {
+      let initialValue = chart.map((item) => item.value);
+      setMaxValue(Math.max(...initialValue));
+   }, [chart]);
+
    const value = {
-      expense,
-      filteredYear,
+      expenseData: expenseFlag,
       getDataHandler,
       filterYearHandler,
-      flag,
+      chart,
+      maxValue,
    };
    return (
       <div>
@@ -120,7 +133,7 @@ const App = () => {
             </Card>
             <Card>
                <ExpensesFilter />
-               <ExpenseChart dataPoint={chart} maxValue={maxValue} />
+               <ExpenseChart />
             </Card>
             <Card>
                <ExpenseItems />
