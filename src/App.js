@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Card from './Components/Card/Card';
+import Chart from './Components/Chart/Chart';
 import Context from './Components/Context/Context';
 import ExpensesFilter from './Components/ExpenseFilter/ExpenseFilter';
-import ExpenseChart from './Components/ExpenseItem/ExpenseChart/ExpenseChart';
 import ExpenseItems from './Components/ExpenseItems/ExpenseItems';
 import NewExpense from './Components/NewExpense/NewExpense';
 
@@ -127,13 +127,13 @@ const App = () => {
    return (
       <div>
          <Context.Provider value={value}>
-            <h1 style={{ textAlign: 'center' }}>Function React</h1>
+            <h1 style={{ textAlign: 'center' }}>Expense Tracker</h1>
             <Card>
                <NewExpense />
             </Card>
             <Card>
                <ExpensesFilter />
-               <ExpenseChart />
+               <Chart />
             </Card>
             <Card>
                <ExpenseItems />

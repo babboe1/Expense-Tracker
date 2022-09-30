@@ -3,13 +3,9 @@ import ExpenseDate from './ExpenseDate/ExpenseDate';
 import './ExpenseItem.css';
 
 const ExpenseItem = (props) => {
+   // eslint-disable-next-line no-unused-vars
    const [title, setTitle] = useState(props.title);
-   
 
-
-   const titleChangeHandler = () => {
-      setTitle(`${props.title} - Updated`)
-   }
    return (
       <div className="expense-item">
          <ExpenseDate date={props.date} />
@@ -17,7 +13,6 @@ const ExpenseItem = (props) => {
             <h2>{title}</h2>
             <div className="expense-item__price">${props.amount}</div>
          </div>
-         <button onClick={titleChangeHandler}>change title</button>
       </div>
    );
 };

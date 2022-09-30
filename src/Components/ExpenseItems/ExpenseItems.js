@@ -8,7 +8,7 @@ const ExpenseItems = () => {
    return expenseData.length > 0 ? (
       expenseData.map((item, idx) => (
          <ExpenseItem
-            key={idx}
+            key={item.title + item.amount}
             title={item.title}
             amount={item.amount}
             date={item.date}
