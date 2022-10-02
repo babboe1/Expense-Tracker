@@ -67,7 +67,6 @@ const App = () => {
    let initialValue = chart.map((item) => item.value);
    const [maxValue, setMaxValue] = useState(Math.max(...initialValue));
 
-
    // Handler functions starts here
    const getDataHandler = (newData) => {
       setExpenseData((prevState) => {
@@ -75,9 +74,7 @@ const App = () => {
       });
       setChart((prev) => {
          prev.forEach((item, idx) => {
-            if (idx === newData.date.getMonth()) {
-               item.value += +newData.amount;
-            }
+            item[newData.date.getMonth()] += +newData.amount;
          });
          return [...prev];
       });
