@@ -1,35 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import Context from '../../Context/Context';
 import './ExpenseForm.css';
 
-const ExpenseForm = () => {
-   const [initial, setInitial] = useState("");
+const ExpenseForm = (props) => {
+   const [initial, setInitial] = useState('');
+   const [showExpense, setShowExpense] = useState(true);
 
    const changeHandler = (e, type) => {
       setInitial((prevState) => {
+         if (type === 'date') {
+            return {
+               ...prevState,
+               date: new Date(e.target.value),
+            };
+         }
          return {
             ...prevState,
-            [type]: e.target.value
-         }
-      })
+            id: prevState.id ? +prevState.id + 1 : 1,
+            [type]: e.target.value,
+         };
+      });
    };
+   const expenseContext = useContext(Context);
 
    const submitHandler = (e) => {
+      expenseContext.getDataHandler(initial);
       e.preventDefault();
-      const expenseData = { ...initial }
-      console.log(expenseData);
-      e.target.reset();
-   }
+      // e.target.reset();
+   };
 
-   return (
-      <form onSubmit={submitHandler} className="new-expense__controls" action="">
+   return !showExpense ? (
+      <form onSubmit={submitHandler} className="" action="">
          <div className="new-expense__controls">
             <div className="new-expense__control">
                <label htmlFor="">Title</label>
-               <input type="text" onChange={(e) => changeHandler(e, 'title')} />
+               <input
+                  required
+                  type="text"
+                  onChange={(e) => changeHandler(e, 'title')}
+               />
             </div>
             <div className="new-expense__control">
                <label htmlFor="">Amount</label>
                <input
+                  required
                   type="number"
                   min="0.01"
                   step="0.01"
@@ -39,6 +53,7 @@ const ExpenseForm = () => {
             <div className="new-expense__control">
                <label htmlFor="">Date</label>
                <input
+                  required
                   type="date"
                   min="2019-01-01"
                   max="2022-12-12"
@@ -47,10 +62,28 @@ const ExpenseForm = () => {
             </div>
          </div>
          <div className="new-expense__actions">
-            <button type="button">Cancel</button>
+            <button
+               onClick={() => {
+                  setShowExpense(!showExpense);
+               }}
+               type="button"
+            >
+               Cancel
+            </button>
             <button type="submit">Add Expense</button>
          </div>
       </form>
+   ) : (
+      <div className="new-expense__actions" style={{ textAlign: 'center' }}>
+         <button
+            onClick={() => {
+               setShowExpense(!showExpense);
+            }}
+            type="submit"
+         >
+            Add Expense
+         </button>
+      </div>
    );
 };
 
